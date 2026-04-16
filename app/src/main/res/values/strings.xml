@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Test</string>
+    <string name="contact_book_title">Контактная книга</string>
+    <string name="button_call">📞 Позвонить</string>
+    <string name="button_email">✉️ Написать email</string>
+    <string name="button_map">🗺️ Показать офис на карте</string>
+    <string name="button_share">📤 Поделиться контактом</string>
+    <string name="toast_no_call_app">Нет приложения для звонков</string>
+    <string name="toast_no_email_app">Нет приложения для почты</string>
+    <string name="toast_no_map_app">Нет приложения для карт</string>
+    <string name="toast_no_share_app">Нет приложений для отправки</string>
+    <string name="email_subject">Обращение</string>
+    <string name="share_contact_text">Контакт: +7 (495) 123-45-67, contact@example.com</string>
+    <string name="phone_number">+74951234567</string>
+    <string name="email_address">contact@example.com</string>
+    <string name="office_location">60.0237,30.2289</string>
+    <string name="office_label">Наш офис</string>
 </resources>

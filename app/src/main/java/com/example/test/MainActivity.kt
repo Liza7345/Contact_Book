@@ -27,7 +27,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.material3.ButtonDefaults
 
 
 class MainActivity : ComponentActivity() {
@@ -43,17 +45,38 @@ class MainActivity : ComponentActivity() {
 }
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactBookScreen() {
     val context = LocalContext.current
 
+    val phoneNumber = stringResource(R.string.phone_number)
+    val emailAddress = stringResource(R.string.email_address)
+    val emailSubject = stringResource(R.string.email_subject)
+    val shareText = stringResource(R.string.share_contact_text)
+    val location = stringResource(R.string.office_location)
+    val label = stringResource(R.string.office_label)
+
+    val toastNoCallApp = stringResource(R.string.toast_no_call_app)
+    val toastNoEmailApp = stringResource(R.string.toast_no_email_app)
+    val toastNoMapApp = stringResource(R.string.toast_no_map_app)
+    val toastNoShareApp = stringResource(R.string.toast_no_share_app)
+
+    val buttonCallText = stringResource(R.string.button_call)
+    val buttonEmailText = stringResource(R.string.button_email)
+    val buttonMapText = stringResource(R.string.button_map)
+    val buttonShareText = stringResource(R.string.button_share)
+
+    val buttonBgColor = colorResource(R.color.button_bg)
+    val buttonTextColor = colorResource(R.color.button_text)
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Контактная книга") },
+                title = { Text(stringResource(R.string.contact_book_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                    containerColor = colorResource(R.color.top_bar_container)
                 )
             )
         },
@@ -69,21 +92,24 @@ fun ContactBookScreen() {
         ) {
             Button(
                 onClick = {
-                    val phoneNumber = "+74951234567"
                     val intent = Intent(Intent.ACTION_DIAL).apply {
                         data = Uri.parse("tel:$phoneNumber")
                     }
                     if (intent.resolveActivity(context.packageManager) != null) {
                         context.startActivity(intent)
                     } else {
-                        Toast.makeText(context, "Нет приложения для звонков", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, toastNoCallApp, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
                     .width(250.dp)
-                    .height(60.dp)
+                    .height(60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonBgColor,
+                    contentColor = buttonTextColor
+                )
             ) {
-                Text("📞 Позвонить")
+                Text(buttonCallText)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -91,66 +117,80 @@ fun ContactBookScreen() {
             Button(
                 onClick = {
                     val intent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:contact@example.com")
-                        putExtra(Intent.EXTRA_SUBJECT, "Обращение")
+                        data = Uri.parse("mailto:$emailAddress")
+                        putExtra(Intent.EXTRA_SUBJECT, emailSubject)
                     }
                     if (intent.resolveActivity(context.packageManager) != null) {
                         context.startActivity(intent)
                     } else {
-                        Toast.makeText(context, "Нет приложения для почты", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, toastNoEmailApp, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
                     .width(250.dp)
-                    .height(60.dp)
+                    .height(60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonBgColor,
+                    contentColor = buttonTextColor
+                )
             ) {
-                Text("✉️ Написать email")
+                Text(buttonEmailText)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    val uri = Uri.parse("geo:60.0237,30.2289?q=60.0237,30.2289(Наш офис)")
+                    val uri = Uri.parse("geo:$location?q=$location($label)")
                     val intent = Intent(Intent.ACTION_VIEW, uri)
                     if (intent.resolveActivity(context.packageManager) != null) {
                         context.startActivity(intent)
                     } else {
-                        Toast.makeText(context, "Нет приложения для карт", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, toastNoMapApp, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
                     .width(250.dp)
-                    .height(60.dp)
+                    .height(60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonBgColor,
+                    contentColor = buttonTextColor
+                )
             ) {
-                Text("🗺️ Показать офис на карте")
+                Text(buttonMapText)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = {
-                    val shareText = "Контакт: +7 (495) 123-45-67, contact@example.com"
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
                         putExtra(Intent.EXTRA_TEXT, shareText)
                     }
-                    val chooser = Intent.createChooser(intent, "Поделиться контактом")
+
+                    // Исправление: проверяем, есть ли хоть одно приложение для обработки Intent
                     if (intent.resolveActivity(context.packageManager) != null) {
+                        val chooser = Intent.createChooser(intent, buttonShareText)
                         context.startActivity(chooser)
                     } else {
-                        Toast.makeText(context, "Нет приложений для отправки", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, toastNoShareApp, Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
                     .width(250.dp)
-                    .height(60.dp)
+                    .height(60.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonBgColor,
+                    contentColor = buttonTextColor
+                )
             ) {
-                Text("📤 Поделиться контактом")
+                Text(buttonShareText)
             }
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun ContactBookScreenPreview() {
