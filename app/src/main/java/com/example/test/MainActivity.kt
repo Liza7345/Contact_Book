@@ -169,7 +169,6 @@ fun ContactBookScreen() {
                         putExtra(Intent.EXTRA_TEXT, shareText)
                     }
 
-                    // Исправление: проверяем, есть ли хоть одно приложение для обработки Intent
                     if (intent.resolveActivity(context.packageManager) != null) {
                         val chooser = Intent.createChooser(intent, buttonShareText)
                         context.startActivity(chooser)
